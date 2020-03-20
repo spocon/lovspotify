@@ -19,6 +19,8 @@ import xyz.gianlu.librespot.player.Player;
 
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("player")
@@ -34,19 +36,18 @@ public class PlayerController {
     }
 
     @GetMapping(value = "current", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCurrentPlayList() {
+    public ResponseEntity<?> getCurrentPlayList(@RequestParam(value = "imgsize", defaultValue = "0", required = false) Integer imgsize) {
 
-        return getPlayer().map(t -> {
-            PlayableId id = t.currentPlayableId();
+        return getPlayer().map(song -> {
+            PlayableId id = song.currentPlayableId();
             CurrentSong currentSong = new CurrentSong();
-            currentSong.setImage(getImageFromCurrentSong(t, Metadata.Image.Size.DEFAULT_VALUE));
-            currentSong.setTrackTime(t.time());
-            if (id instanceof EpisodeId) currentSong.setEpisode(t.currentEpisode());
-            if (id instanceof TrackId) currentSong.setTrack(t.currentTrack());
+            currentSong.setImage(getImageFromCurrentSong(song, imgsize));
+            currentSong.setTrackTime(song.time());
+            if (id instanceof EpisodeId) currentSong.setEpisode(song.currentEpisode());
+            if (id instanceof TrackId) currentSong.setTrack(song.currentTrack());
             return ResponseEntity.ok().body(currentSong);
         }).orElse(ResponseEntity.notFound().build());
     }
-
 
     @PostMapping(value = "load", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loadSong(@RequestBody PlayerLoadSong loadSong) {
@@ -116,21 +117,17 @@ public class PlayerController {
         if (this.sessionWrapper.get() != null) {
             this.player = sessionWrapper.get().player();
         }
-        return Optional.ofNullable(this.player);
+        return ofNullable(this.player);
     }
 
     private Image getImageFromCurrentSong(Player t, int size) {
         Metadata.Track track = t.currentTrack();
         Metadata.Episode episode = t.currentEpisode();
         Metadata.Image image = null;
-        if (track != null) {
-            image = track.getAlbum().getCoverGroupOrBuilder().getImage(size);
-        }
-        if (episode != null) {
-            image = episode.getCoverImageOrBuilder().getImage(size);
-        }
-
-        return new Image(image.getHeight(), image.getWidth(), image.getSize().getNumber(), ImageId.fromHex(Utils.bytesToHex(image.getFileId())).hexId());
+        if (track != null) image = track.getAlbum().getCoverGroupOrBuilder().getImage(size);
+        if (episode != null) image = episode.getCoverImageOrBuilder().getImage(size);
+        return ofNullable(image)
+                .map(y -> new Image(y.getHeight(), y.getWidth(), y.getSize().getNumber(), ImageId.fromHex(Utils.bytesToHex(y.getFileId())).hexId()))
+                .orElse(new Image(0, 0, 0, ""));
     }
-
 }
