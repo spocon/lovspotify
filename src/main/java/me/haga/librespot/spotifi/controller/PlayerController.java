@@ -1,13 +1,10 @@
 package me.haga.librespot.spotifi.controller;
 
 import com.spotify.metadata.Metadata;
-import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.CurrentSong;
 import me.haga.librespot.spotifi.model.Image;
 import me.haga.librespot.spotifi.model.PlayerLoadSong;
 import me.haga.librespot.spotifi.util.SessionWrapper;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
@@ -20,7 +17,6 @@ import xyz.gianlu.librespot.mercury.model.PlayableId;
 import xyz.gianlu.librespot.mercury.model.TrackId;
 import xyz.gianlu.librespot.player.Player;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -43,7 +39,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             PlayableId id = t.currentPlayableId();
             CurrentSong currentSong = new CurrentSong();
-            currentSong.setImage(getImageFromCurrentSong(t, 0));
+            currentSong.setImage(getImageFromCurrentSong(t, Metadata.Image.Size.DEFAULT_VALUE));
             currentSong.setTrackTime(t.time());
             if (id instanceof EpisodeId) currentSong.setEpisode(t.currentEpisode());
             if (id instanceof TrackId) currentSong.setTrack(t.currentTrack());
@@ -52,8 +48,7 @@ public class PlayerController {
     }
 
 
-
-    @GetMapping("load")
+    @PostMapping(value = "load", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loadSong(@RequestBody PlayerLoadSong loadSong) {
         return getPlayer().map(t -> {
             t.load(loadSong.getUri(), loadSong.getPlay());
@@ -129,7 +124,7 @@ public class PlayerController {
         Metadata.Episode episode = t.currentEpisode();
         Metadata.Image image = null;
         if (track != null) {
-            image = t.currentTrack().getAlbum().getCoverGroupOrBuilder().getImage(size);
+            image = track.getAlbum().getCoverGroupOrBuilder().getImage(size);
         }
         if (episode != null) {
             image = episode.getCoverImageOrBuilder().getImage(size);

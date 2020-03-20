@@ -1,4 +1,5 @@
 window.onload = function () {
+    refresh_content();
     setInterval(function () {
         refresh_content();
     }, 5000);
