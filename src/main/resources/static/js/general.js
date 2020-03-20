@@ -44,7 +44,7 @@ function refresh_content() {
     getData("http://localhost:8080/player/current", "").then(result => {
         console.log(result);
         // if (typeof result.show === "undefined") {
-        document.getElementById("spotify-image").src = "https://i.scdn.co/image/" + result.track.album.coverGroup.image[0].fileId.toLowerCase();
+        document.getElementById("spotify-image").src = "https://i.scdn.co/image/" +result.image.key;
         document.getElementById("spotify-artist").innerText = result.track.artist[0].name;
         document.getElementById("spotify-title").innerText = result.track.name;
     })
@@ -68,19 +68,19 @@ function refresh_content() {
 function song_play() {
     $("#play_pause_button").attr('onclick', 'song_pause()');
     $("#play_pause_image").removeClass("fa-play").addClass("fa-pause");
-    jrpc.call('player.play');
+    getData("http://localhost:8080/player/resume", "");
 }
 
 function song_pause() {
     $("#play_pause_button").attr('onclick', 'song_play()');
     $("#play_pause_image").removeClass("fa-pause").addClass("fa-play");
-    jrpc.call('player.pause');
+    getData("http://localhost:8080/player/pause", "");
 }
 
 function song_forward() {
-    jrpc.call('player.next');
+    getData("http://localhost:8080/player/next", "");
 }
 
 function song_backward() {
-    jrpc.call('player.prev');
+    getData("http://localhost:8080/player/previous", "");
 }

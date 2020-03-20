@@ -1,21 +1,34 @@
 package me.haga.librespot.spotifi.controller;
 
+import com.spotify.metadata.Metadata;
+import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.CurrentSong;
+import me.haga.librespot.spotifi.model.Image;
 import me.haga.librespot.spotifi.model.PlayerLoadSong;
 import me.haga.librespot.spotifi.util.SessionWrapper;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xyz.gianlu.librespot.common.Utils;
 import xyz.gianlu.librespot.mercury.model.EpisodeId;
+import xyz.gianlu.librespot.mercury.model.ImageId;
 import xyz.gianlu.librespot.mercury.model.PlayableId;
 import xyz.gianlu.librespot.mercury.model.TrackId;
 import xyz.gianlu.librespot.player.Player;
 
+import java.io.IOException;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("player")
 public class PlayerController {
+
+    private static final Logger log = LogManager.getLogger(PlayerController.class);
 
     private final SessionWrapper sessionWrapper;
     private Player player;
@@ -30,22 +43,22 @@ public class PlayerController {
         return getPlayer().map(t -> {
             PlayableId id = t.currentPlayableId();
             CurrentSong currentSong = new CurrentSong();
+            currentSong.setImage(getImageFromCurrentSong(t, 0));
             currentSong.setTrackTime(t.time());
-            if (id instanceof EpisodeId)
-                currentSong.setEpisode(t.currentEpisode());
-            if (id instanceof TrackId)
-                currentSong.setTrack(t.currentTrack());
-            currentSong.setCurrent(id.toSpotifyUri());
+            if (id instanceof EpisodeId) currentSong.setEpisode(t.currentEpisode());
+            if (id instanceof TrackId) currentSong.setTrack(t.currentTrack());
             return ResponseEntity.ok().body(currentSong);
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
+
+
 
     @GetMapping("load")
     public ResponseEntity<?> loadSong(@RequestBody PlayerLoadSong loadSong) {
         return getPlayer().map(t -> {
-            t.load(loadSong.getUri(),loadSong.getPlay());
+            t.load(loadSong.getUri(), loadSong.getPlay());
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("pause")
@@ -53,7 +66,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.pause();
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("resume")
@@ -61,7 +74,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.play();
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("previous")
@@ -69,7 +82,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.previous();
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("next")
@@ -77,7 +90,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.next();
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("volume/up")
@@ -85,7 +98,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.volumeUp();
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("volume/set/{volnr}")
@@ -93,7 +106,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.setVolume(volnr);
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("volume/down")
@@ -101,7 +114,7 @@ public class PlayerController {
         return getPlayer().map(t -> {
             t.volumeDown();
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.noContent().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     private Optional<Player> getPlayer() {
@@ -110,4 +123,19 @@ public class PlayerController {
         }
         return Optional.ofNullable(this.player);
     }
+
+    private Image getImageFromCurrentSong(Player t, int size) {
+        Metadata.Track track = t.currentTrack();
+        Metadata.Episode episode = t.currentEpisode();
+        Metadata.Image image = null;
+        if (track != null) {
+            image = t.currentTrack().getAlbum().getCoverGroupOrBuilder().getImage(size);
+        }
+        if (episode != null) {
+            image = episode.getCoverImageOrBuilder().getImage(size);
+        }
+
+        return new Image(image.getHeight(), image.getWidth(), image.getSize().getNumber(), ImageId.fromHex(Utils.bytesToHex(image.getFileId())).hexId());
+    }
+
 }

@@ -13,8 +13,7 @@ public class CurrentSong {
     private Metadata.Episode episode;
     @JsonSerialize(using = ProtobufSerializer.class)
     private Metadata.Track track;
-
-
+    private Image image;
 
 
     public CurrentSong(Metadata.Track track) {
@@ -55,5 +54,13 @@ public class CurrentSong {
 
     public Metadata.Episode getEpisode() {
         return episode;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
