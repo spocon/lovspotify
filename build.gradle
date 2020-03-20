@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'com.haga.librespot'
+group = 'me.haga.librespot'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '13'
 

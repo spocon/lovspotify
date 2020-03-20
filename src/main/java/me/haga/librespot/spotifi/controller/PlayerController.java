@@ -1,4 +1,4 @@
-package com.haga.librespot.spotifi.controller;
+package me.haga.librespot.spotifi.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

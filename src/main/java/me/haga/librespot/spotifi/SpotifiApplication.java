@@ -1,4 +1,4 @@
-package com.haga.librespot.spotifi;
+package me.haga.librespot.spotifi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
