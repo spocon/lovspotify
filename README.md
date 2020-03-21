@@ -32,7 +32,7 @@ Essentially, here's what the easy installer does,
 # Add repo and its GPG key
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7DBE8BF06EA39B78
 ## This downloads the armhf version for Raspbian Pi
-echo 'deb http://ppa.launchpad.net/lovspotify/lovspotify/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/lovspotify.list
+echo 'deb http://ppa.launchpad.net/spocon/lovspotify/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/lovspotify.list
 
 # Install package
 sudo apt-get update
