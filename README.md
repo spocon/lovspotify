@@ -8,6 +8,8 @@ which thinly wraps the awesome
 [Gianluca Altomani](https://github.com/devgianlu) and others. It works out of the box on
 all three revisions of the Pi, immediately after installation.
 
+![Spotify GUI : http://localhost:8080](images/intro1.png)
+
 ## Download Latest Version
 
 ### Installation for Raspberry Pi
