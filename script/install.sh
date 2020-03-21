@@ -8,3 +8,4 @@ echo 'deb http://ppa.launchpad.net/spocon/lovspotify/ubuntu bionic main' | sudo 
 # Install package
 sudo apt-get update
 sudo apt-get -y install lovspotify
+
