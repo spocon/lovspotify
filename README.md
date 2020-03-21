@@ -14,7 +14,7 @@ all three revisions of the Pi, immediately after installation.
 
 This command downloads and installs the Debian package and adds its apt repository, which ensures you'll always be up to date with upstream changes.
 ```
-curl -sL https://lovspotify.github.io/lovspotify/install.sh | sh
+curl -sL https://github.com/spocon/lovspotify/blob/master/script/install.sh | sh
 ```
 That's it! Plug a speaker into your Pi on your local network, select the device in Spotify et voilà!
 
