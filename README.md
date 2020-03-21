@@ -20,7 +20,7 @@ That's it! Plug a speaker into your Pi on your local network, select the device 
 
 ### Installation Ubuntu and Debian 
 ```
-sudo add-apt-repository ppa:lovspotify/lovspotify
+sudo add-apt-repository ppa:spocon/lovspotify
 sudo apt-get -y update
 sudo apt-get install lovspotify 
 ```
