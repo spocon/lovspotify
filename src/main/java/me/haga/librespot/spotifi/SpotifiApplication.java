@@ -18,6 +18,7 @@ public class SpotifiApplication {
 
     private static final Logger logger = LogManager.getLogger(SpotifiApplication.class);
     private static AbsConfiguration librespotConf;
+    private static ZeroconfServer zeroconfServer;
 
     public static void main(String[] args) {
         try {
@@ -31,7 +32,10 @@ public class SpotifiApplication {
     @Bean
     public SessionWrapper getSessionWrapper() {
         try {
-            return SessionWrapper.fromZeroconf(ZeroconfServer.create(librespotConf));
+            if(zeroconfServer == null) {
+                zeroconfServer = ZeroconfServer.create(librespotConf);
+            }
+            return SessionWrapper.fromZeroconf(zeroconfServer);
         } catch (IOException e) {
             logger.info("could not start SessionWrapper: ", e);
         }
