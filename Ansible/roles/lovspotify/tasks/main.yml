@@ -1,0 +1,66 @@
+---
+
+- set_fact:
+    tmpFolder: /tmp/lovspotify
+
+- name: create tmp folder {{ tmpFolder }}
+  file:
+    path: "{{ tmpFolder }}"
+    state: directory
+
+- name: Removing old build folder
+  file:
+    path: "{{ tmpFolder }}/build"
+    state: absent
+
+- name: Create build folder
+  file:
+    path: "{{ tmpFolder }}{{ item }}"
+    state: directory
+    recurse: true
+  with_items:
+    - "/build/lovspotify_{{ lovspotify_version }}"
+
+- name: Building deb package {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}
+  shell: "dch -v {{ lovspotify_version }} \"Update to {{ lovspotify_version }}, for more information please see https://github.com/spocon/lovspotify \" -M -D bionic"
+  args:
+    chdir: "{{ workspace }}/template"
+
+- name: Copy deb folder to {{ workspace }}/build
+  copy:
+    src: "{{ workspace }}/template/"
+    dest: "{{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}"
+
+
+
+- name: Put service in package
+  template:
+    src: lovspotify.service
+    dest: "{{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/debian/lovspotify.service"
+
+
+- name: Downloading lovspotify-{{ lovspotify_version }}
+  import_tasks: build_lovspotify.yml
+
+- name: Fixing permissions for DEBIAN folder
+  file:
+     path: "{{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/debian"
+     mode: 0755
+     recurse: true
+
+- name: Fixing permissions for DEBIAN folder install
+  shell: "chmod -x {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/debian/*.install"
+
+- name: Fixing permissions for DEBIAN folder rules
+  shell: "chmod +x {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/debian/rules"
+
+- name: Making sure that config.toml is unix lf
+  shell: "dos2unix {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/opt/lovspotify/config.toml"
+
+- name: Build deb package local
+  import_tasks: build_deb.yml
+  when: upload == "false"
+
+- name: Build source for upload
+  import_tasks: build_source.yml
+  when: upload == "true"

@@ -1,0 +1,11 @@
+---
+- name: Building Deb package
+  hosts: localhost
+  become_user: vagrant
+
+  vars:
+    workspace: "{{ lookup('env','WORKSPACE') | default('..', true) }}"
+    upload: "{{ lookup('env','UPLOAD') | default('false', true) }}"
+
+  roles:
+    - lovspotify

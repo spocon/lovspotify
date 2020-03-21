@@ -5,6 +5,11 @@ build/
 !**/src/main/**
 !**/src/test/**
 
+**/.vagrant
+*.retry
+*.deb
+*.log
+
 ### STS ###
 .apt_generated
 .classpath

@@ -1,0 +1,19 @@
+[Unit]
+Description=lovspotify
+Wants=network-online.target
+After=network.target network-online.target
+Requires=network-online.target
+
+[Service]
+Type=simple
+User=lovspotify
+Group=lovspotify
+Restart=always
+RestartSec=10
+PermissionsStartOnly=true
+WorkingDirectory=/opt/lovspotify
+ExecStartPre=/bin/sh -c 'until ping -c1 spotify.com; do sleep 5; done;'
+ExecStart=/usr/bin/java -jar /opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar --conf-file=/opt/lovspotify/config.toml
+
+[Install]
+WantedBy=multi-user.target

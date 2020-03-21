@@ -1,0 +1,15 @@
+
+- name: Build application
+  shell: "./gradlew clean build"
+  args:
+    chdir: "{{ workspace }}"
+  register: lovspotify_build
+  delegate_to: 127.0.0.1
+
+- debug:
+    var: lovspotify_build
+
+- name: Copy build {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar
+  copy:
+    src: "{{ workspace}}/build/libs/spotifi.jar"
+    dest: "{{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar"

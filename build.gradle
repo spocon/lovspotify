@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
-
+    id 'maven'
 }
 
 group = 'me.haga.librespot.spotifi'
@@ -24,5 +24,18 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.13.0'
 }
 
+
+/*uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: spoconMavenUsername, password: spoconMavenPassword)
+            }
+            pom.version = "1.0.0"
+            pom.artifactId = "lovspotify"
+            pom.groupId = "me.haga.librespot.spotifi"
+        }
+    }
+}*/
 
 

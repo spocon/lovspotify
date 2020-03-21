@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+if test -f "/opt/lovspotify/config.toml"; then
+    mv /opt/lovspotify/config.toml /opt/lovspotify/config.usercustom
+fi
+
+if ! getent group lovspotify >/dev/null 2>&1; then
+    addgroup --system lovspotify
+fi
+
+if ! id lovspotify >/dev/null 2>&1; then
+    adduser --system --disabled-password --disabled-login --ingroup lovspotify lovspotify
+    adduser lovspotify audio
+fi

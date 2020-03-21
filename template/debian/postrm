@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "remove" ]; then
+    if [ -x "/usr/bin/deb-systemd-helper" ]; then
+        deb-systemd-helper mask lovspotify.service >/dev/null
+    fi
+fi
+
+if [ "$1" = "purge" ]; then
+    if [ -x "/usr/bin/deb-systemd-helper" ]; then
+        deb-systemd-helper purge lovspotify.service >/dev/null
+        deb-systemd-helper unmask lovspotify.service >/dev/null
+    fi
+
+    deluser --force lovspotify || true
+    delgroup --force lovspotify >/dev/null 2>&1 || true
+    rm -rf /opt/lovspotify
+fi
+
+if [ -d /run/systemd/system ]; then
+    systemctl --system daemon-reload >/dev/null || true
+fi
