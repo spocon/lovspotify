@@ -1,3 +1,10 @@
+lovspotify (1.0.2) bionic; urgency=medium
+
+  * Update to 1.0.2, for more information please see
+    https://github.com/spocon/lovspotify
+
+ -- Thorsten H <spocondeb@gmail.com>  Sun, 22 Mar 2020 15:05:11 +0000
+
 lovspotify (1.0.1) bionic; urgency=medium
 
   * Update to 1.0.1, for more information please see
