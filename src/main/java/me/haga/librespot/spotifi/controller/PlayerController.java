@@ -39,13 +39,19 @@ public class PlayerController {
     public ResponseEntity<?> getCurrentPlayList(@RequestParam(value = "imgsize", defaultValue = "0", required = false) Integer imgsize) {
 
         return getPlayer().map(song -> {
-            PlayableId id = song.currentPlayableId();
-            CurrentSong currentSong = new CurrentSong();
-            currentSong.setImage(getImageFromCurrentSong(song, imgsize));
-            currentSong.setTrackTime(song.time());
-            if (id instanceof EpisodeId) currentSong.setEpisode(song.currentEpisode());
-            if (id instanceof TrackId) currentSong.setTrack(song.currentTrack());
-            return ResponseEntity.ok().body(currentSong);
+            try {
+                PlayableId id = song.currentPlayableId();
+                CurrentSong currentSong = new CurrentSong();
+                currentSong.setImage(getImageFromCurrentSong(song, imgsize));
+                currentSong.setTrackTime(song.time());
+                if (id instanceof EpisodeId) currentSong.setEpisode(song.currentEpisode());
+                if (id instanceof TrackId) currentSong.setTrack(song.currentTrack());
+                return ResponseEntity.ok().body(currentSong);
+            } catch (IllegalArgumentException e) {
+                log.warn("Not connected: ",e);
+                return ResponseEntity.notFound().build();
+            }
+
         }).orElse(ResponseEntity.notFound().build());
     }
 
