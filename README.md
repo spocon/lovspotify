@@ -10,7 +10,17 @@ all three revisions of the Pi, immediately after installation.
 
 ![Spotify GUI : http://localhost:8080](images/intro1.png)
 
-After installation , open a browser and open http://localhost:8080
+## Spotify GUI
+After installation , open a browser: http://localhost:8080 or access the GUI from any computer in the same network: SERVER_IP:8080
+
+Port can be changed under:
+```
+/opt/lovspotify/gui.yml 
+```
+after you have changed the port please restart
+```
+service lovspotify restart
+```
 
 ## Download Latest Version
 
