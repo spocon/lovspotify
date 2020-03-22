@@ -71,7 +71,7 @@ async function getData(url = '', data = {}) {
 }
 
 function refresh_content() {
-    getData("http://localhost:8080/player/current", "").then(result => {
+    getData("player/current", "").then(result => {
         console.log("TEST"+result);
         if (result === undefined) {
             document.getElementById("spotify-image").src = "images/placeholder_1.png";
@@ -92,27 +92,27 @@ function refresh_content() {
 function song_play() {
     $("#play_pause_button").attr('onclick', 'song_pause()');
     $("#play_pause_image").removeClass("fa-play").addClass("fa-pause");
-    getData("http://localhost:8080/player/resume", "");
+    getData("player/resume", "");
 }
 
 function song_pause() {
     $("#play_pause_button").attr('onclick', 'song_play()');
     $("#play_pause_image").removeClass("fa-pause").addClass("fa-play");
-    getData("http://localhost:8080/player/pause", "");
+    getData("player/pause", "");
 }
 
 function song_forward() {
-    getData("http://localhost:8080/player/next", "");
+    getData("player/next", "");
 }
 
 function song_backward() {
-    getData("http://localhost:8080/player/previous", "");
+    getData("player/previous", "");
 }
 
 function song_volumeup() {
-    getData("http://localhost:8080/player/volume/up", "");
+    getData("player/volume/up", "");
 }
 
 function song_volumedown() {
-    getData("http://localhost:8080/player/volume/down", "");
+    getData("player/volume/down", "");
 }

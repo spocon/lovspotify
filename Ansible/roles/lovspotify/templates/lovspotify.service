@@ -13,7 +13,7 @@ RestartSec=10
 PermissionsStartOnly=true
 WorkingDirectory=/opt/lovspotify
 ExecStartPre=/bin/sh -c 'until ping -c1 spotify.com; do sleep 5; done;'
-ExecStart=/usr/bin/java -jar /opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar --conf-file=/opt/lovspotify/config.toml
+ExecStart=/usr/bin/java -Dspring.config.location=classpath:application.yml,file:///opt/lovspotify/gui.yml -jar /opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar --conf-file=/opt/lovspotify/config.toml
 
 [Install]
 WantedBy=multi-user.target
