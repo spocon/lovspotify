@@ -2,7 +2,7 @@ window.onload = function () {
     refresh_content();
     setInterval(function () {
         refresh_content();
-    }, 5000);
+    }, 1100);
 };
 
 document.onkeydown = checkKey;
@@ -32,7 +32,7 @@ function checkKey(e) {
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(url, {
+    const response = await fetch( '192.168.0.27:8080' + url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         mode: 'cors',
@@ -50,7 +50,7 @@ async function postData(url = '', data = {}) {
 
 async function getData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(url, {
+    const response = await fetch('http://192.168.0.27:8080/' + url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
         mode: 'cors',
@@ -77,11 +77,15 @@ function refresh_content() {
             document.getElementById("spotify-image").src = "images/placeholder_1.png";
             document.getElementById("spotify-artist").innerText = "Not Connected";
             document.getElementById("spotify-title").innerText = "Not Connected";
-            document.getElementById("spotify-not-connected").hidden = false
+            document.getElementById("spotify-album").innerText = "Not Connected";
+            document.getElementById("spotify-time").innerText = "Not Connected";
+            document.getElementById("spotify-not-connected").hidden = false;
         } else {
             document.getElementById("spotify-image").src = "https://i.scdn.co/image/" + result.image.key;
             document.getElementById("spotify-artist").innerText = result.track.artist[0].name;
             document.getElementById("spotify-title").innerText = result.track.name;
+            document.getElementById("spotify-album").innerText = result.track.album.name;
+            document.getElementById("spotify-time").innerText = GetTime(result.trackTime, result.track.duration);
             document.getElementById("spotify-not-connected").hidden = true
         }
     }).catch(error => {
@@ -115,4 +119,19 @@ function song_volumeup() {
 
 function song_volumedown() {
     getData("player/volume/down", "");
+}
+function GetTime(time, duration) {
+    return time.toHHMMSS() + "/" + duration.toHHMMSS();
+}
+
+Number.prototype.toHHMMSS = function () {
+    var sec_num = parseInt(this, 10) / 1000; // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = Math.floor(sec_num - (hours * 3600) - (minutes * 60));
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+ seconds;
 }
