@@ -32,7 +32,7 @@ function checkKey(e) {
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch( 'http://192.168.0.27:8080/' + url, {
+    const response = await fetch( url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         mode: 'cors',
@@ -50,7 +50,7 @@ async function postData(url = '', data = {}) {
 
 async function getData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch( 'http://192.168.0.27:8080/' + url, {
+    const response = await fetch( url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
         mode: 'cors',
