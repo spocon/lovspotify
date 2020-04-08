@@ -20,24 +20,29 @@ body
 .content {
 	padding: 3rem;
 }
+.h3 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 #spotify-title {
 	color: hsl(0, 0%, 100%);
 }
 #spotify-title:before {    
     font-family: 'FontAwesome';
     content: '\f001';
-    margin:0 8px 0 -15px;
+    margin:0 8px 0 -0px;
 }
 #spotify-artist:before {    
     font-family: 'FontAwesome';
     content: '\f007';
-    margin:0 9px 0 -12px;
+    margin:0 9px 0 0px;
 }
 
 #spotify-album:before {    
     font-family: 'FontAwesome';
     content: '\f02b';
-    margin:0 6px 0 -13px;
+    margin:0 6px 0 0px;
 }
 .right {
 	text-align: center;
