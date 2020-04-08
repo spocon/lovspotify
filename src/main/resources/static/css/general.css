@@ -14,6 +14,8 @@ body
 	background: linear-gradient(to bottom, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#343432', endColorstr='#282825', GradientType=0 );
 	color: hsla(0, 0%, 100%, 0.7);
+	overflow: hidden;
+	cursor: none
 }
 .content {
 	padding: 3rem;
@@ -45,7 +47,7 @@ body
 	padding-top: 6rem;
 }
 #spotify-image {
-	width: 50%;
+	width: 100%;
 	margin: auto;
 }
 .controls {
@@ -58,4 +60,18 @@ body
 .controls a {
 	width: auto;
 	margin: auto;
+}
+#spotify-not-connected {
+	background-color: #000;
+	position:absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index:9999;
+	color: #333;
+	border: 0;
+	text-align: center;
+	font-size:4rem;
+	padding-top:4rem;
 }
