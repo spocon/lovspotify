@@ -88,7 +88,10 @@ function refresh_content() {
             document.getElementById("spotify-title").innerText = result.track.name;
             document.getElementById("spotify-album").innerText = result.track.album.name;
             document.getElementById("spotify-time").innerText = GetTime(result.trackTime, result.track.duration);
-            document.getElementById("spotify-not-connected").hidden = true
+            document.getElementById("spotify-not-connected").hidden = true;
+            var percent = (result.trackTime / result.track.duration) * 100;
+            document.getElementById("percent").style.width = percent + "%";
+            console.log(percent);
         }
     }).catch(error => {
         console.error(error)

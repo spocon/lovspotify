@@ -33,6 +33,19 @@ body
 	font-size: 3rem;
 	color: white;
 }
+.percentBar {
+	position: absolute;
+	height:1rem;
+	bottom: 0;
+	width: 100%;
+	z-index: 1000;
+	background-color: hsla(0, 0%, 15%, 0.8);
+}
+#percent {
+	position: relative;
+	height: 100%;
+	background-color: hsla(0, 0%, 85%, 0.8);
+}
 #spotify-title {
 	color: hsl(0, 0%, 100%);
 }
