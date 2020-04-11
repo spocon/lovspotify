@@ -80,6 +80,8 @@ function refresh_content() {
             document.getElementById("spotify-album").innerText = "Not Connected";
             document.getElementById("spotify-time").innerText = "Not Connected";
             document.getElementById("spotify-not-connected").hidden = false;
+            document.getElementById("time").innerText = moment().format('HH:mm');
+            document.getElementById("date").innerHTML = moment().format('dddd<br /> Do MMMM');
         } else {
             document.getElementById("spotify-image").src = "https://i.scdn.co/image/" + result.image.key;
             document.getElementById("spotify-artist").innerText = result.track.artist[0].name;

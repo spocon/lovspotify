@@ -25,6 +25,14 @@ body
     white-space: nowrap;
     overflow: hidden;
 }
+.time {
+	font-size: 8rem;
+	color: white;
+}
+.date {
+	font-size: 3rem;
+	color: white;
+}
 #spotify-title {
 	color: hsl(0, 0%, 100%);
 }
