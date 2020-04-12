@@ -25,6 +25,17 @@ body
     white-space: nowrap;
     overflow: hidden;
 }
+.topbar {
+	position: absolute;
+	top:0;
+	width: 100%;
+	height: 30px;
+	background-color: hsl(0, 0%, 0%);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: .1rem 1rem;
+}
 .time {
 	font-size: 8rem;
 	color: white;
