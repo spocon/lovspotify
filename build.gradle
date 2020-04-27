@@ -30,13 +30,19 @@ dependencies {
 }
 
 
-
+/*
 task sourcesJar(type: Jar, dependsOn: classes) {
+    onlyIf {
+        gradle.taskGraph.hasTask('uploadArchives')
+    }
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
+    onlyIf {
+        gradle.taskGraph.hasTask('uploadArchives')
+    }
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
@@ -55,6 +61,7 @@ signing {
 
 
 uploadArchives {
+
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
@@ -94,6 +101,6 @@ uploadArchives {
             pom.groupId = "me.haga.librespot.spotifi"
         }
     }
-}
+}*/
 
 
