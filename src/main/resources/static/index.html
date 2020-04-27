@@ -15,38 +15,9 @@
 
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a class="navbar-text" href="#">
-            <h3>SpoCon - (Spotify Client Connector)</h3>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank" href="https://github.com/spocon/lovspotify">About</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 <!-- Page Content -->
-<div class="container bg-light p-lg-3">
-    <div class="row justify-content-center">
-        <div id="spotify-not-connected" class="alert alert-primary w-100 text-center" role="alert">
-            Spotify not connected
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div>
-            <img alt="spotify-image" style="width: 300px; height: 300px" src="" id="spotify-image"/>
-        </div>
-    </div>
+
     <div class="row justify-content-center">
         <div id="spotify-not-connected" role="alert">
             <div class="disconnected">Spotify not connected.</div>
@@ -71,11 +42,11 @@
                 <img alt="spotify-image" src="" id="spotify-image"/>
             </div>
             <div class="row controls">
-                    <a onclick="song_backward()"><i id="" class="fa fa-fast-backward fa-2x"></i>
+                    <a onclick="song_backward()"><i  class="fa fa-fast-backward fa-2x"></i>
                     </a>
                     <a id="play_pause_button" onclick="song_pause()"><i id="play_pause_image" class="fa fa-pause fa-2x"></i>
                     </a>
-                    <a onclick="song_forward()"><i id="" class="fa fa-fast-forward fa-2x"></i>
+                    <a onclick="song_forward()"><i class="fa fa-fast-forward fa-2x"></i>
                     </a>
             </div>
         </div>
