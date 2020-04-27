@@ -5,83 +5,55 @@
     <title>Spotify Client</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="3rd-party/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="3rd-party/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
     <script src="3rd-party/jquery/jquery-3.4.1.min.js"></script>
+    <script src="3rd-party/moment.js"></script>
     <script src="js/general.js"></script>
 </head>
 
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a class="navbar-text" href="#">
-            <h3>SpoCon - (Spotify Client Connector)</h3>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank" href="https://github.com/spocon/lovspotify">About</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 <!-- Page Content -->
-<div class="container bg-light p-lg-3">
+<div>
     <div class="row justify-content-center">
-        <div id="spotify-not-connected" class="alert alert-primary w-100 text-center" role="alert">
-            Spotify not connected
+        <div id="spotify-not-connected" role="alert">
+            <div class="time"><span id="time"></span></div>
+            <div class="date"><span id="date"></span></div>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div>
-            <img alt="spotify-image" style="width: 300px; height: 300px" src="" id="spotify-image"/>
-        </div>
+    <div class="topbar">
+        <div class="smalldate" id="smalldate"></div>
+        <div class="smalltime" id="smalltime"></div>
+        <div class="smallweather" id="smallweather">Loading..</div>
     </div>
-    <div class="row justify-content-center">
-        <div class="row bg-dark justify-content-center" style="width: 300px">
-            <div>
-                <button class="btn btn-dark" onclick="song_backward()"><i class="fa fa-backward fa-3x "></i>
-                </button>
-            </div>
-            <div>
-                <button id="play_pause_button" class="btn btn-dark" onclick="song_pause()"><i id="play_pause_image"
-                                                                                              class="fa fa-pause fa-3x"></i>
-                </button>
-            </div>
-            <div>
-                <button class="btn btn-dark" onkeypress="" onclick="song_forward()"><i class="fa fa-forward fa-3x"></i>
-                </button>
-            </div>
+    <div class="row justify-content-center content">
+        <div class="col-6 left">
+                <div class="h3" id="spotify-title"></div>
+                <div class="h3" id="spotify-artist"></div>
+                <div class="h3" id="spotify-album"></div>
+                <div class="h3" id="spotify-time"></div>
         </div>
-    </div>
-    <div class="pl-md-3 pt-2">
-        <div class="row">
-            <div id="head-artist" class="col-2 h3">Artist:</div>
-            <div class="h3" id="spotify-artist"></div>
-        </div>
-        <div class="row">
-            <div id="head-song" class="col-2 h3">Song:</div>
-            <div class="h3" id="spotify-title"></div>
-        </div>
-        <div class="h6 pl-3 pt-4 float-left">
+        <div class="col-6 right">
             <div class="row">
-                <p class="font-weight-lighter mr-3">Keyboard Keys</p>
-                <p>Last Song </p><p class="ml-3 mr-3 fa fa-arrow-left btn btn-dark"></p>
-                <p>Next Song </p><p class="ml-3 mr-3 fa fa-arrow-right btn btn-dark"></p>
-                <p>Volume Up </p><p class="ml-3 mr-3 fa fa-arrow-up btn btn-dark"></p>
-                <p>Volume Down</p><p class="ml-3 mr-3 fa fa-arrow-down btn btn-dark"></p>
+                <img alt="spotify-image" src="" id="spotify-image"/>
+            </div>
+            <div class="row controls">
+                    <a onclick="song_backward()"><i id="" class="fa fa-fast-backward fa-2x"></i>
+                    </a>
+                    <a id="play_pause_button" onclick="song_pause()"><i id="play_pause_image" class="fa fa-pause fa-2x"></i>
+                    </a>
+                    <a onclick="song_forward()"><i id="" class="fa fa-fast-forward fa-2x"></i>
+                    </a>
             </div>
         </div>
     </div>
-
+    <div class="percentBar">
+        <div id="percent"></div>
+    </div>
 </div>
 </body>
 

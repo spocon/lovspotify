@@ -1,0 +1,114 @@
+body
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: rgba(52,52,50,1);
+	background: -moz-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(52,52,50,1)), color-stop(44%, rgba(54,55,52,1)), color-stop(100%, rgba(40,40,37,1)));
+	background: -webkit-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
+	background: -o-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
+	background: -ms-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
+	background: linear-gradient(to bottom, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#343432', endColorstr='#282825', GradientType=0 );
+	color: hsla(0, 0%, 100%, 0.7);
+	overflow: hidden;
+	cursor: none
+}
+.content {
+	padding: 3rem;
+}
+.h3 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.topbar {
+	position: absolute;
+	top:0;
+	width: 100%;
+	height: 30px;
+	background-color: hsl(0, 0%, 0%);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: .1rem 1rem;
+}
+.time {
+	font-size: 8rem;
+	color: white;
+}
+.date {
+	font-size: 3rem;
+	color: white;
+}
+.percentBar {
+	position: absolute;
+	height:1rem;
+	bottom: 0;
+	width: 100%;
+	z-index: 1000;
+	background-color: hsla(0, 0%, 15%, 0.8);
+}
+#percent {
+	position: relative;
+	height: 100%;
+	background-color: hsla(0, 0%, 85%, 0.8);
+}
+#spotify-title {
+	color: hsl(0, 0%, 100%);
+}
+#spotify-title:before {    
+    font-family: 'FontAwesome';
+    content: '\f001';
+    margin:0 8px 0 -0px;
+}
+#spotify-artist:before {    
+    font-family: 'FontAwesome';
+    content: '\f007';
+    margin:0 9px 0 0px;
+}
+
+#spotify-album:before {    
+    font-family: 'FontAwesome';
+    content: '\f02b';
+    margin:0 6px 0 0px;
+}
+.right {
+	text-align: center;
+}
+.left {
+	padding-left: 6rem;
+	padding-top: 6rem;
+}
+#spotify-image {
+	width: 100%;
+	margin: auto;
+}
+.controls {
+	width:50%;
+	margin: 1rem auto;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+}
+.controls a {
+	width: auto;
+	margin: auto;
+}
+#spotify-not-connected {
+	background-color: #000;
+	position:absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index:9999;
+	color: #333;
+	border: 0;
+	text-align: center;
+	font-size:4rem;
+	padding-top:4rem;
+}
