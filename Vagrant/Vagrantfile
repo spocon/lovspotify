@@ -4,9 +4,9 @@ Vagrant.configure(2) do |config|
     config.vbguest.auto_update = true
     config.ssh.insert_key = true
     config.vm.define "lovspotify" do |system|
-        system.vm.network "private_network", ip: "10.0.0.11"
+        system.vm.network "public_network"
         system.vm.network "forwarded_port", guest: 22, host: 5557
-        system.vm.network "forwarded_port", guest: 8081, host: 8080
+        system.vm.network "forwarded_port", guest: 8080, host: 8080
         system.vm.box = "ubuntu/bionic64"
 
         system.vm.hostname = "lovspotify"
