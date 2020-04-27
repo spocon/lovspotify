@@ -48,10 +48,8 @@ public class PlayerController {
                 if (id instanceof TrackId) currentSong.setTrack(song.currentTrack());
                 return ResponseEntity.ok().body(currentSong);
             } catch (IllegalArgumentException e) {
-                log.warn("Not connected: ",e);
                 return ResponseEntity.notFound().build();
             }
-
         }).orElse(ResponseEntity.notFound().build());
     }
 

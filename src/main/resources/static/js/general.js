@@ -1,8 +1,12 @@
 window.onload = function () {
     refresh_content();
+    GetWeather();
     setInterval(function () {
         refresh_content();
-    }, 5000);
+    }, 1100);
+    setInterval(function () {
+        GetWeather();
+    }, 1800000);
 };
 
 document.onkeydown = checkKey;
@@ -32,7 +36,7 @@ function checkKey(e) {
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(url, {
+    const response = await fetch( url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         mode: 'cors',
@@ -50,7 +54,7 @@ async function postData(url = '', data = {}) {
 
 async function getData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(url, {
+    const response = await fetch( url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
         mode: 'cors',
@@ -77,12 +81,22 @@ function refresh_content() {
             document.getElementById("spotify-image").src = "images/placeholder_1.png";
             document.getElementById("spotify-artist").innerText = "Not Connected";
             document.getElementById("spotify-title").innerText = "Not Connected";
-            document.getElementById("spotify-not-connected").hidden = false
+            document.getElementById("spotify-album").innerText = "Not Connected";
+            document.getElementById("spotify-time").innerText = "Not Connected";
+            document.getElementById("spotify-not-connected").hidden = false;
+            document.getElementById("time").innerText = moment().format('HH:mm');
+            document.getElementById("date").innerHTML = moment().format('dddd<br /> Do MMMM');
         } else {
             document.getElementById("spotify-image").src = "https://i.scdn.co/image/" + result.image.key;
             document.getElementById("spotify-artist").innerText = result.track.artist[0].name;
             document.getElementById("spotify-title").innerText = result.track.name;
-            document.getElementById("spotify-not-connected").hidden = true
+            document.getElementById("spotify-album").innerText = result.track.album.name;
+            document.getElementById("spotify-time").innerText = GetTime(result.trackTime, result.track.duration);
+            document.getElementById("spotify-not-connected").hidden = true;
+            var percent = (result.trackTime / result.track.duration) * 100;
+            document.getElementById("percent").style.width = percent + "%";
+            document.getElementById("smalltime").innerText = moment().format('HH:mm');
+            document.getElementById("smalldate").innerHTML = moment().format('DD/MM/YYYY');
         }
     }).catch(error => {
         console.error(error)
@@ -115,4 +129,31 @@ function song_volumeup() {
 
 function song_volumedown() {
     getData("player/volume/down", "");
+}
+function GetTime(time, duration) {
+    return time.toHHMMSS() + "/" + duration.toHHMMSS();
+}
+
+function GetWeather() {
+    var weather = document.getElementById("smallweather");
+    if (weather != null)
+    {
+        var url = 'https://api.openweathermap.org/data/2.5/weather?q=manchester,uk&appid=de5a8ebb36ec50432e14d40dcbd82f69&units=metric';
+        getData(url).then(result => {
+            var weather = `<img src='http://openweathermap.org/img/wn/${result.weather[0].icon}@2x.png' height="30px" /> ${Math.round(result.main.temp)}C`;   
+            document.getElementById("smallweather").innerHTML = weather;    
+        });
+    }
+}
+
+Number.prototype.toHHMMSS = function () {
+    var sec_num = parseInt(this, 10) / 1000; // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = Math.floor(sec_num - (hours * 3600) - (minutes * 60));
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+ seconds;
 }
