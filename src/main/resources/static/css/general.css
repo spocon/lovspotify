@@ -6,13 +6,6 @@ body
 	bottom: 0;
 	right: 0;
 	background: rgba(52,52,50,1);
-	background: -moz-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
-	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(52,52,50,1)), color-stop(44%, rgba(54,55,52,1)), color-stop(100%, rgba(40,40,37,1)));
-	background: -webkit-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
-	background: -o-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
-	background: -ms-linear-gradient(top, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
-	background: linear-gradient(to bottom, rgba(52,52,50,1) 0%, rgba(54,55,52,1) 44%, rgba(40,40,37,1) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#343432', endColorstr='#282825', GradientType=0 );
 	color: hsla(0, 0%, 100%, 0.7);
 	overflow: hidden;
 	cursor: none
@@ -44,9 +37,16 @@ body
 	font-size: 3rem;
 	color: white;
 }
+.disconnected {
+	font-size: 2rem;
+	position: absolute;
+	top:0;
+	width:100%;
+	text-align: center;
+}
 .percentBar {
 	position: absolute;
-	height:1rem;
+	height:5px;
 	bottom: 0;
 	width: 100%;
 	z-index: 1000;
@@ -84,7 +84,6 @@ body
 	padding-top: 6rem;
 }
 #spotify-image {
-	width: 100%;
 	margin: auto;
 }
 .controls {

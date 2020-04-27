@@ -138,7 +138,7 @@ function GetWeather() {
     var weather = document.getElementById("smallweather");
     if (weather != null)
     {
-        var url = 'https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?q=manchester,uk&appid=de5a8ebb36ec50432e14d40dcbd82f69&units=metric';
+        var url = 'https://api.openweathermap.org/data/2.5/weather?q=manchester,uk&appid=de5a8ebb36ec50432e14d40dcbd82f69&units=metric';
         getData(url).then(result => {
             var weather = `<img src='http://openweathermap.org/img/wn/${result.weather[0].icon}@2x.png' height="30px" /> ${Math.round(result.main.temp)}C`;   
             document.getElementById("smallweather").innerHTML = weather;    
