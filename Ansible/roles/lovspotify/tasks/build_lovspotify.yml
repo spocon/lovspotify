@@ -11,5 +11,5 @@
 
 - name: Copy build {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar
   copy:
-    src: "{{ workspace}}/build/libs/spotifi.jar"
+    src: "{{ workspace}}/build/libs/lovspotify.jar"
     dest: "{{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}/opt/lovspotify/lovspotify-{{ lovspotify_version }}.jar"
