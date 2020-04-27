@@ -1,14 +1,33 @@
-body
+
+@media only screen
+and (max-device-height : 768px)
+and (max-device-width : 1024px)
 {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	background: rgba(52,52,50,1);
-	color: hsla(0, 0%, 100%, 0.7);
-	overflow: hidden;
-	cursor: none
+	body {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: rgba(52,52,50,1);
+		color: hsla(0, 0%, 100%, 0.7);
+		overflow: hidden;
+		cursor: none;
+	}
+}
+@media only screen
+and (min-device-height : 768px)
+and (min-device-width : 1024px) {
+	body {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: rgba(52, 52, 50, 1);
+		color: hsla(0, 0%, 100%, 0.7);
+		overflow: hidden;
+	}
 }
 .content {
 	padding: 3rem;
@@ -84,6 +103,8 @@ body
 	padding-top: 6rem;
 }
 #spotify-image {
+	min-width: 300px;
+	min-height: 300px;
 	margin: auto;
 }
 .controls {
