@@ -59,7 +59,7 @@ public final class SessionWrapper {
     public Session get() {
         Session s = ref.get();
         if (s != null) {
-            if (s.valid()) return s;
+            if (s.isValid()) return s;
             else clear();
         }
 
