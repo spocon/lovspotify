@@ -29,20 +29,13 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.13.0'
 }
 
-
 /*
 task sourcesJar(type: Jar, dependsOn: classes) {
-    onlyIf {
-        gradle.taskGraph.hasTask('uploadArchives')
-    }
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    onlyIf {
-        gradle.taskGraph.hasTask('uploadArchives')
-    }
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
@@ -96,11 +89,11 @@ uploadArchives {
                     }
                 }
             }
-            pom.version = "1.0.3"
+            pom.version = "1.1.0"
             pom.artifactId = "lovspotify"
             pom.groupId = "me.haga.librespot.spotifi"
         }
-    }
-}*/
+    }*/
+}
 
 
