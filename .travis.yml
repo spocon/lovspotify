@@ -1,0 +1,11 @@
+language: java
+os: linux
+jdk:
+  - openjdk11
+
+script:
+  - gradlew clean build
+
+cache:
+  directories:
+    - ~/.m2/repository

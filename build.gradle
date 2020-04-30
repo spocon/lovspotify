@@ -93,7 +93,7 @@ uploadArchives {
             pom.artifactId = "lovspotify"
             pom.groupId = "me.haga.librespot.spotifi"
         }
-    }*/
-}
+    }
+}*/
 
 
