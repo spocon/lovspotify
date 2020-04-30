@@ -3,11 +3,8 @@ os: linux
 jdk:
   - openjdk11
 
-before_script:
-  - chmod u+x gradlew
-
 script:
-  - gradlew clean build
+  - ./gradlew clean build
 
 cache:
   directories:
