@@ -1,4 +1,9 @@
 # [Lovspotify Spotify Client for Raspberry Pi, Ubuntu and Debian](https://lovspotify.github.io/lovspotify)
+
+[![Build Status](https://travis-ci.com/spocon/lovspotify.svg?branch=master)](https://travis-ci.com/spocon/lovspotify)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.haga.librespot.spotifi/lovspotify/badge.svg)](https://maven-badges.herokuapp.com/maven-central/me.haga.librespot.spotifi/lovspotify)
+
+
 ## Introduction
 
 Lovspotify is a [Spotify Connect](https://www.spotify.com/connect/) for
