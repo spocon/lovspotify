@@ -11,7 +11,7 @@ group = 'me.haga.librespot.spotifi'
 description = 'Spotify Client + RestAPI + Spotify GUI'
 
 
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 
 repositories {

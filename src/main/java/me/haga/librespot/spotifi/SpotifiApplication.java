@@ -3,6 +3,7 @@ package me.haga.librespot.spotifi;
 import me.haga.librespot.spotifi.util.SessionWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,9 @@ import java.io.IOException;
 @SpringBootApplication
 public class SpotifiApplication {
 
-    private static final Logger logger = LogManager.getLogger(SpotifiApplication.class);
+    private static final Logger log = LogManager.getLogger(SpotifiApplication.class);
+
+    @Autowired
     private static AbsConfiguration librespotConf;
     private static ZeroconfServer zeroconfServer;
 
@@ -24,20 +27,38 @@ public class SpotifiApplication {
         try {
             librespotConf = new FileConfiguration(args);
         } catch (IOException e) {
-            logger.info("could not load config: ", e);
+            log.info("could not load config: ", e);
         }
         SpringApplication.run(SpotifiApplication.class, args);
+    }
+
+    public static AbsConfiguration getLibrespotConf() {
+        return librespotConf;
+    }
+
+    public static ZeroconfServer restartZeroConfServer(String configFileLocation) {
+        log.info("Restarting ZeroConfServer");
+        try {
+            librespotConf = new FileConfiguration("--conf-file="+configFileLocation);
+            zeroconfServer.closeSession();
+            zeroconfServer.close();
+            zeroconfServer = ZeroconfServer.create(librespotConf);
+            return zeroconfServer;
+        } catch (IOException e) {
+            log.error("Problems with restart of ZeroConfServer: ", e);
+        }
+        return null;
     }
 
     @Bean
     public SessionWrapper getSessionWrapper() {
         try {
-            if(zeroconfServer == null) {
+            if (zeroconfServer == null) {
                 zeroconfServer = ZeroconfServer.create(librespotConf);
             }
-            return SessionWrapper.fromZeroconf(zeroconfServer);
+           return SessionWrapper.fromZeroconf(zeroconfServer);
         } catch (IOException e) {
-            logger.info("could not start SessionWrapper: ", e);
+            log.info("could not start SessionWrapper: ", e);
         }
         return null;
     }

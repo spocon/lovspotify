@@ -2,3 +2,6 @@ server:
   port: 8080
   servlet:
     context-path: /
+
+librespot:
+  config: /opt/lovspotify/config.toml
