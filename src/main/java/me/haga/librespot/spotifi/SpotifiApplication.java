@@ -32,10 +32,6 @@ public class SpotifiApplication {
         SpringApplication.run(SpotifiApplication.class, args);
     }
 
-    public static AbsConfiguration getLibrespotConf() {
-        return librespotConf;
-    }
-
     @Bean
     public SessionWrapper getSessionWrapper() {
         try {
@@ -47,6 +43,14 @@ public class SpotifiApplication {
             log.info("could not start SessionWrapper: ", e);
         }
         return null;
+    }
+
+    public static AbsConfiguration getLibrespotConf() {
+        return librespotConf;
+    }
+
+    public static ZeroconfServer getZeroconfServer() {
+        return zeroconfServer;
     }
 }
 

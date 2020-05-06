@@ -3,12 +3,15 @@ package me.haga.librespot.spotifi.service;
 import com.electronwill.nightconfig.core.file.FileConfig;
 import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.ConfigData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import xyz.gianlu.librespot.AbsConfiguration;
 
 import javax.sound.sampled.*;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class ConfigService {
 
 
+    private static final Logger log = LogManager.getLogger(ConfigService.class);
     public static final AudioFormat OUTPUT_FORMAT = new AudioFormat(44100, 16, 2, true, false);
 
 
@@ -60,6 +64,13 @@ public class ConfigService {
         conf.set("logLevel", configData.getLogLevel());
         conf.save();
         conf.close();
+        log.info("Shutdown of ZeroConfServer");
+        try {
+            SpotifiApplication.getZeroconfServer().closeSession();
+            SpotifiApplication.getZeroconfServer().close();
+        } catch (IOException e) {
+            log.error("Could not shutdown ZeroConfServer: ",e);
+        }
         System.exit(0);
     }
 
