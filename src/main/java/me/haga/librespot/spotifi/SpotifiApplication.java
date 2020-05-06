@@ -36,20 +36,6 @@ public class SpotifiApplication {
         return librespotConf;
     }
 
-    public static ZeroconfServer restartZeroConfServer(String configFileLocation) {
-        log.info("Restarting ZeroConfServer");
-        try {
-            librespotConf = new FileConfiguration("--conf-file="+configFileLocation);
-            zeroconfServer.closeSession();
-            zeroconfServer.close();
-            zeroconfServer = ZeroconfServer.create(librespotConf);
-            return zeroconfServer;
-        } catch (IOException e) {
-            log.error("Problems with restart of ZeroConfServer: ", e);
-        }
-        return null;
-    }
-
     @Bean
     public SessionWrapper getSessionWrapper() {
         try {

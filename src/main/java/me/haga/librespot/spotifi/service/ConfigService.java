@@ -3,19 +3,10 @@ package me.haga.librespot.spotifi.service;
 import com.electronwill.nightconfig.core.file.FileConfig;
 import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.ConfigData;
-import me.haga.librespot.spotifi.util.SessionWrapper;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.SingletonBeanRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import xyz.gianlu.librespot.AbsConfiguration;
-import xyz.gianlu.librespot.core.Session;
-import xyz.gianlu.librespot.core.ZeroconfServer;
 
 import javax.sound.sampled.*;
 import java.net.InetAddress;
@@ -24,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.haga.librespot.spotifi.SpotifiApplication.restartZeroConfServer;
 
 @Service
 public class ConfigService {
@@ -38,13 +28,6 @@ public class ConfigService {
 
     @Value("${librespot.config}")
     private String configFileLocation;
-
-
-    private final ApplicationContext context;
-
-    public ConfigService(ApplicationContext context) {
-        this.context = context;
-    }
 
     public ConfigData getConfigData() {
         AbsConfiguration librespotConf = SpotifiApplication.getLibrespotConf();
@@ -77,8 +60,7 @@ public class ConfigService {
         conf.set("logLevel", configData.getLogLevel());
         conf.save();
         conf.close();
-        ZeroconfServer zeroconfServer = restartZeroConfServer(configFileLocation);
-        refreshSessionWrapper(zeroconfServer);
+        System.exit(0);
     }
 
 
@@ -91,16 +73,6 @@ public class ConfigService {
         }
         return mixers;
 
-    }
-
-    private void refreshSessionWrapper(ZeroconfServer server) {
-        BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) context.getAutowireCapableBeanFactory();
-        ConfigurableApplicationContext configContext = (ConfigurableApplicationContext) context;
-        SingletonBeanRegistry beanRegistry = configContext.getBeanFactory();
-        try {
-            beanDefinitionRegistry.removeBeanDefinition("getSessionWrapper");
-        } catch (NoSuchBeanDefinitionException ignore) {}
-        beanRegistry.registerSingleton("getSessionWrapper", SessionWrapper.fromZeroconf(server));
     }
 
 
