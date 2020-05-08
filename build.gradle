@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.13.0'
 }
 
-/*
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -89,11 +89,9 @@ uploadArchives {
                     }
                 }
             }
-            pom.version = "1.2.1"
+            pom.version = "1.2.3"
             pom.artifactId = "lovspotify"
             pom.groupId = "me.haga.librespot.spotifi"
         }
     }
 }
-*/
-
