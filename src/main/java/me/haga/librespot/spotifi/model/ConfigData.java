@@ -14,6 +14,8 @@ public class ConfigData {
     private String url;
     private List<String> availableMixers;
     private String chosenMixer;
+    private List<String> availableLogLevels;
+    private List<String> availableDeviceTypes;
 
     public String getDeviceId() {
         return deviceId;
@@ -69,6 +71,22 @@ public class ConfigData {
 
     public void setChosenMixer(String chosenMixer) {
         this.chosenMixer = chosenMixer;
+    }
+
+    public void setAvailableLogLevels(List<String> availableLogLevels) {
+        this.availableLogLevels = availableLogLevels;
+    }
+
+    public List<String> getAvailableLogLevels() {
+        return availableLogLevels;
+    }
+
+    public void setAvailableDeviceTypes(List<String> availableDeviceTypes) {
+        this.availableDeviceTypes = availableDeviceTypes;
+    }
+
+    public List<String> getAvailableDeviceTypes() {
+        return availableDeviceTypes;
     }
 
     /*deviceId = "" ### Device ID (40 chars, leave empty for random)  ###

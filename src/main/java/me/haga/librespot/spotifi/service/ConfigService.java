@@ -1,12 +1,14 @@
 package me.haga.librespot.spotifi.service;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
+import com.spotify.connectstate.Connect;
 import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.ConfigData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Service;
 import xyz.gianlu.librespot.AbsConfiguration;
 
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,8 @@ public class ConfigService {
                 .map(mixer -> mixer.getMixerInfo().getName())
                 .collect(Collectors.toList());
         configData.setAvailableMixers(availableMixers);
+        configData.setAvailableLogLevels(Arrays.stream(LogLevel.values()).map(Enum::name).collect(Collectors.toList()));
+        configData.setAvailableDeviceTypes(Arrays.stream(Connect.DeviceType.values()).map(Enum::name).collect(Collectors.toList()));
 
         try {
             configData.setUrl("http://" + InetAddress.getLocalHost().getHostAddress() + ":" + port);
@@ -60,6 +65,7 @@ public class ConfigService {
         FileConfig conf = FileConfig.of(configFileLocation);
         conf.load();
         conf.set("deviceName", configData.getDeviceName());
+        conf.set("deviceType", configData.getDeviceType());
         conf.set("player.mixerSearchKeywords", configData.getChosenMixer());
         conf.set("logLevel", configData.getLogLevel());
         conf.save();
