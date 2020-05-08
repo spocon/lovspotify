@@ -89,7 +89,7 @@ uploadArchives {
                     }
                 }
             }
-            pom.version = "1.2.3"
+            pom.version = "1.2.4"
             pom.artifactId = "lovspotify"
             pom.groupId = "me.haga.librespot.spotifi"
         }
