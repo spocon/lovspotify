@@ -1,8 +1,6 @@
 package me.haga.librespot.spotifi.model;
 
 import com.spotify.connectstate.Connect;
-import org.apache.log4j.Level;
-
 import java.util.List;
 
 public class ConfigData {
@@ -16,6 +14,7 @@ public class ConfigData {
     private String chosenMixer;
     private List<String> availableLogLevels;
     private List<String> availableDeviceTypes;
+    private Integer serverPort;
 
     public String getDeviceId() {
         return deviceId;
@@ -87,6 +86,14 @@ public class ConfigData {
 
     public List<String> getAvailableDeviceTypes() {
         return availableDeviceTypes;
+    }
+
+    public Integer getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(Integer serverPort) {
+        this.serverPort = serverPort;
     }
 
     /*deviceId = "" ### Device ID (40 chars, leave empty for random)  ###

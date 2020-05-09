@@ -3,5 +3,7 @@ server:
   servlet:
     context-path: /
 
-librespot:
-  config: /opt/lovspotify/config.toml
+logging:
+  level:
+    root: INFO
+
