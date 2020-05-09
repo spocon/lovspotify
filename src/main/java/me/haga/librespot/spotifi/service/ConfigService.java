@@ -83,7 +83,7 @@ public class ConfigService {
     }
 
     public void setConfigData(ConfigData configData) {
-        FileConfig conf = FileConfig.of("/opt/lovspotify/config.toml");
+        FileConfig conf = FileConfig.of(librespotFile);
         conf.load();
         conf.set("deviceName", configData.getDeviceName());
         conf.set("deviceType", configData.getDeviceType());

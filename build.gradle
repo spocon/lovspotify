@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.13.2'
 }
 
-/*
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -74,7 +74,8 @@ uploadArchives {
                 url 'https://github.com/spocon/lovspotify'
 
                 scm {
-                    connection 'scm:git@github.com:spocon/lovspotify.git'
+                    connection 'scm:git:git://github.com/spocon/lovspotify.git'
+                    developerConnection 'scm:git:ssh://github.com:spocon/lovspotify.git'
                     url 'https://github.com/spocon/lovspotify'
                 }
 
@@ -97,4 +98,4 @@ uploadArchives {
             pom.groupId = "me.haga.librespot.spotifi"
         }
     }
-}*/
+}
