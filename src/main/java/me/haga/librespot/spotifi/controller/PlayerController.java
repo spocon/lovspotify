@@ -11,11 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.gianlu.librespot.common.Utils;
-import xyz.gianlu.librespot.mercury.model.EpisodeId;
 import xyz.gianlu.librespot.mercury.model.ImageId;
 import xyz.gianlu.librespot.mercury.model.PlayableId;
-import xyz.gianlu.librespot.mercury.model.TrackId;
 import xyz.gianlu.librespot.player.Player;
+import xyz.gianlu.librespot.player.TrackOrEpisode;
 
 import java.util.Optional;
 
@@ -40,12 +39,16 @@ public class PlayerController {
 
         return getPlayer().map(song -> {
             try {
-                PlayableId id = song.currentPlayableId();
                 CurrentSong currentSong = new CurrentSong();
                 currentSong.setImage(getImageFromCurrentSong(song, imgsize));
                 currentSong.setTrackTime(song.time());
-                if (id instanceof EpisodeId) currentSong.setEpisode(song.currentEpisode());
-                if (id instanceof TrackId) currentSong.setTrack(song.currentTrack());
+                TrackOrEpisode toe = song.currentMetadata();
+
+                if (toe.isEpisode()) {
+                    currentSong.setEpisode(toe.episode);
+                } else {
+                    currentSong.setTrack(toe.track);
+                }
                 return ResponseEntity.ok().body(currentSong);
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.notFound().build();
@@ -125,13 +128,11 @@ public class PlayerController {
     }
 
     private Image getImageFromCurrentSong(Player t, int size) {
-        Metadata.Track track = t.currentTrack();
-        Metadata.Episode episode = t.currentEpisode();
-        Metadata.Image image = null;
-        if (track != null) image = track.getAlbum().getCoverGroupOrBuilder().getImage(size);
-        if (episode != null) image = episode.getCoverImageOrBuilder().getImage(size);
-        return ofNullable(image)
-                .map(y -> new Image(y.getHeight(), y.getWidth(), y.getSize().getNumber(), ImageId.fromHex(Utils.bytesToHex(y.getFileId())).hexId()))
+        return ofNullable(t.currentMetadata())
+                .map(y -> {
+                    Metadata.Image image = y.getCoverImage().getImage(size);
+                    return new Image(image.getHeight(), image.getWidth(), image.getSize().getNumber(), ImageId.fromHex(Utils.bytesToHex(image.getFileId())).hexId());
+                })
                 .orElse(new Image(0, 0, 0, ""));
     }
 }

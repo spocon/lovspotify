@@ -1,6 +1,6 @@
 
 plugins {
-    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
     id 'maven'
@@ -24,10 +24,7 @@ dependencies {
     }
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
     implementation 'com.google.protobuf:protobuf-java-util:3.11.4'
-    implementation ('xyz.gianlu.librespot:librespot-core:1.3.1') {
-        exclude group: 'log4j'
-    }
-    implementation'org.apache.logging.log4j:log4j-1.2-api:2.13.2'
+    implementation ('xyz.gianlu.librespot:librespot-core:1.4.0')
     implementation 'org.apache.logging.log4j:log4j-core:2.13.2'
     implementation 'org.apache.logging.log4j:log4j-api:2.13.2'
 }
