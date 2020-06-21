@@ -2,6 +2,8 @@ package me.haga.librespot.spotifi.model;
 
 public class Image {
 
+
+
     private int height;
     private int width;
     private Integer size;

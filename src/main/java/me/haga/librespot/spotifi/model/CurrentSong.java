@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.spotify.metadata.Metadata;
 import me.haga.librespot.spotifi.util.ProtobufSerializer;
 
+import java.util.List;
+
 public class CurrentSong {
 
 
@@ -13,6 +15,7 @@ public class CurrentSong {
     private Metadata.Episode episode;
     @JsonSerialize(using = ProtobufSerializer.class)
     private Metadata.Track track;
+    private List<NextTrack> nextTracks;
     private Image image;
 
 
@@ -62,5 +65,13 @@ public class CurrentSong {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public List<NextTrack> getNextTracks() {
+        return nextTracks;
+    }
+
+    public void setNextTracks(List<NextTrack> nextTracks) {
+        this.nextTracks = nextTracks;
     }
 }
