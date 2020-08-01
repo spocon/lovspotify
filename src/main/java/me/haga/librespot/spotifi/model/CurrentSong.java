@@ -10,7 +10,7 @@ public class CurrentSong {
 
 
     private String current;
-    private Long trackTime;
+    private int trackTime;
     @JsonSerialize(using = ProtobufSerializer.class)
     private Metadata.Episode episode;
     @JsonSerialize(using = ProtobufSerializer.class)
@@ -43,11 +43,11 @@ public class CurrentSong {
         this.current = current;
     }
 
-    public Long getTrackTime() {
+    public int getTrackTime() {
         return trackTime;
     }
 
-    public void setTrackTime(Long trackTime) {
+    public void setTrackTime(int trackTime) {
         this.trackTime = trackTime;
     }
 

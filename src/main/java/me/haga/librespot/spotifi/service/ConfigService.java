@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Service;
-import xyz.gianlu.librespot.AbsConfiguration;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -43,7 +42,7 @@ public class ConfigService {
 
     private static final String rootDir = "/opt/lovspotify";
     String appFile = rootDir + "/gui.yml";
-    String librespotFile = rootDir+"/config.toml";
+    String librespotFile = rootDir + "/config.toml";
     private static ObjectMapper objectMapper;
     private static MainConfig mainConfig;
 
@@ -56,13 +55,14 @@ public class ConfigService {
             log.warn("Couldn't read your config gui.yml");
         }
 
-
-        AbsConfiguration librespotConf = SpotifiApplication.getLibrespotConf();
         ConfigData configData = new ConfigData();
-        configData.setDeviceId(librespotConf.deviceId());
-        configData.setDeviceName(librespotConf.deviceName());
-        configData.setDeviceType(librespotConf.deviceType());
-        configData.setChosenMixer(librespotConf.mixerSearchKeywords().length != 0 ? librespotConf.mixerSearchKeywords()[0] : "");
+        FileConfig conf = FileConfig.of(librespotFile);
+        conf.load();
+        String mixersearch = conf.getOrElse("player.mixerSearchKeywords", "");
+        configData.setDeviceId(conf.getOrElse("deviceId", "N/A"));
+        configData.setDeviceName(conf.getOrElse("deviceName", "N/A"));
+        configData.setDeviceType(Connect.DeviceType.valueOf(conf.getOrElse("deviceType", "N/A")));
+        configData.setChosenMixer(mixersearch.length() != 0 ? mixersearch.split(",")[0] : "");
         configData.setLogLevel(mainConfig.getLogging().getLevel().getRoot());
         configData.setServerPort(mainConfig.getServer().getPort());
 
@@ -117,7 +117,6 @@ public class ConfigService {
                 mixers.add(mixer);
         }
         return mixers;
-
     }
 
 

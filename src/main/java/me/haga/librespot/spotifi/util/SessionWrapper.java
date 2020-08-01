@@ -1,17 +1,20 @@
 package me.haga.librespot.spotifi.util;
 
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import xyz.gianlu.librespot.ZeroconfServer;
 import xyz.gianlu.librespot.core.Session;
-import xyz.gianlu.librespot.core.ZeroconfServer;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class SessionWrapper {
-
-    private final AtomicReference<Session> ref = new AtomicReference<>(null);
+/**
+ * @author Gianlu
+ */
+public class SessionWrapper {
+    protected final AtomicReference<Session> sessionRef = new AtomicReference<>(null);
     private Listener listener = null;
 
-    private SessionWrapper() {
+    protected SessionWrapper() {
     }
 
     /**
@@ -20,7 +23,8 @@ public final class SessionWrapper {
      * @param server The {@link ZeroconfServer}
      * @return A wrapper that holds a changing session
      */
-    public static SessionWrapper fromZeroconf( ZeroconfServer server) {
+    @NotNull
+    public static SessionWrapper fromZeroconf(@NotNull ZeroconfServer server) {
         SessionWrapper wrapper = new SessionWrapper();
         server.addSessionListener(wrapper::set);
         return wrapper;
@@ -32,32 +36,35 @@ public final class SessionWrapper {
      * @param session The static session
      * @return A wrapper that holds a never-changing session
      */
-    public static SessionWrapper fromSession( Session session) {
+    @NotNull
+    public static SessionWrapper fromSession(@NotNull Session session) {
         SessionWrapper wrapper = new SessionWrapper();
-        wrapper.ref.set(session);
+        wrapper.sessionRef.set(session);
         return wrapper;
     }
 
-    public void setListener( Listener listener) {
+    public void setListener(@NotNull Listener listener) {
         this.listener = listener;
 
         Session s;
-        if ((s = ref.get()) != null) listener.onNewSession(s);
+        if ((s = sessionRef.get()) != null) listener.onNewSession(s);
     }
 
-    private void set( Session session) {
-        ref.set(session);
+    protected void set(@NotNull Session session) {
+        sessionRef.set(session);
         session.addCloseListener(this::clear);
         if (listener != null) listener.onNewSession(session);
     }
 
-    private void clear() {
-        ref.set(null);
-        if (listener != null) listener.onSessionCleared();
+    protected void clear() {
+        Session old = sessionRef.get();
+        sessionRef.set(null);
+        if (listener != null && old != null) listener.onSessionCleared(old);
     }
 
-    public Session get() {
-        Session s = ref.get();
+    @Nullable
+    public Session getSession() {
+        Session s = sessionRef.get();
         if (s != null) {
             if (s.isValid()) return s;
             else clear();
@@ -67,9 +74,8 @@ public final class SessionWrapper {
     }
 
     public interface Listener {
-        void onSessionCleared();
+        void onSessionCleared(@NotNull Session old);
 
-        void onNewSession( Session session);
+        void onNewSession(@NotNull Session session);
     }
 }
-

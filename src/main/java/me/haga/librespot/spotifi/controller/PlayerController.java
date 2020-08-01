@@ -2,6 +2,7 @@ package me.haga.librespot.spotifi.controller;
 
 
 import com.spotify.metadata.Metadata;
+import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.CurrentSong;
 import me.haga.librespot.spotifi.model.Image;
 import me.haga.librespot.spotifi.model.NextTrack;
@@ -17,9 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.gianlu.librespot.common.Utils;
 import xyz.gianlu.librespot.dealer.ApiClient;
-import xyz.gianlu.librespot.mercury.model.ImageId;
-import xyz.gianlu.librespot.mercury.model.PlayableId;
-import xyz.gianlu.librespot.mercury.model.TrackId;
+import xyz.gianlu.librespot.metadata.ImageId;
+import xyz.gianlu.librespot.metadata.PlayableId;
+import xyz.gianlu.librespot.metadata.TrackId;
 import xyz.gianlu.librespot.player.Player;
 import xyz.gianlu.librespot.player.TrackOrEpisode;
 
@@ -63,7 +64,7 @@ public class PlayerController {
                         currentSong.setEpisode(toe.episode);
                     } else {
                         currentSong.setTrack(toe.track);
-                        ApiClient api = sessionWrapper.get().api();
+                        ApiClient api = sessionWrapper.getSession().api();
                         List<NextTrack> nextTracks = new ArrayList<>();
                         song.tracks(true).next.stream().limit(2).forEach(track -> {
                             try {
@@ -154,8 +155,8 @@ public class PlayerController {
     }
 
     private Optional<Player> getPlayer() {
-        if (this.sessionWrapper.get() != null && player == null) {
-            player = sessionWrapper.get().player();
+        if (this.sessionWrapper.getSession() != null && player == null) {
+            player = new Player(SpotifiApplication.getLibrespotConf().toPlayer(), sessionWrapper.getSession());
             player.addEventsListener(getListener());
         }
         return ofNullable(player);
@@ -168,6 +169,7 @@ public class PlayerController {
             public void onContextChanged(@NotNull String newUri) {
 
             }
+
 
             @Override
             public void onTrackChanged(@NotNull PlayableId id, @Nullable TrackOrEpisode metadata) {

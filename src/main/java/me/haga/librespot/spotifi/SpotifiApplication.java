@@ -3,13 +3,11 @@ package me.haga.librespot.spotifi;
 import me.haga.librespot.spotifi.util.SessionWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import xyz.gianlu.librespot.AbsConfiguration;
-import xyz.gianlu.librespot.FileConfiguration;
-import xyz.gianlu.librespot.core.ZeroconfServer;
+import xyz.gianlu.librespot.ZeroconfServer;
+import xyz.gianlu.librespot.player.FileConfiguration;
 
 import java.io.IOException;
 
@@ -19,8 +17,8 @@ public class SpotifiApplication {
 
     private static final Logger log = LogManager.getLogger(SpotifiApplication.class);
 
-    @Autowired
-    private static AbsConfiguration librespotConf;
+
+    private static FileConfiguration librespotConf;
     private static ZeroconfServer zeroconfServer;
 
     public static void main(String[] args) {
@@ -36,22 +34,24 @@ public class SpotifiApplication {
     public SessionWrapper getSessionWrapper() {
         try {
             if (zeroconfServer == null) {
-                zeroconfServer = ZeroconfServer.create(librespotConf);
+                zeroconfServer = librespotConf.initZeroconfBuilder().create();
             }
-           return SessionWrapper.fromZeroconf(zeroconfServer);
+            return SessionWrapper.fromZeroconf(zeroconfServer);
         } catch (IOException e) {
             log.info("could not start SessionWrapper: ", e);
         }
         return null;
     }
 
-    public static AbsConfiguration getLibrespotConf() {
+    public static FileConfiguration getLibrespotConf() {
         return librespotConf;
     }
 
     public static ZeroconfServer getZeroconfServer() {
         return zeroconfServer;
     }
+
+
 }
 
 

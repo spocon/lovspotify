@@ -24,7 +24,7 @@ dependencies {
     }
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
     implementation 'com.google.protobuf:protobuf-java-util:3.11.4'
-    implementation ('xyz.gianlu.librespot:librespot-core:1.4.0')
+    implementation 'xyz.gianlu.librespot:librespot-player:1.5.1'
     implementation 'org.apache.logging.log4j:log4j-core:2.13.2'
     implementation 'org.apache.logging.log4j:log4j-api:2.13.2'
 }
