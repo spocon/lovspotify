@@ -3,6 +3,7 @@
 set -e
 
 if test -f "/opt/lovspotify/config.toml"; then
+    rm -f /opt/lovspotify/config.example
     mv /opt/lovspotify/config.toml /opt/lovspotify/config.usercustom
 fi
 
