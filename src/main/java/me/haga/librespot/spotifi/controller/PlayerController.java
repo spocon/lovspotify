@@ -2,24 +2,19 @@ package me.haga.librespot.spotifi.controller;
 
 
 import com.spotify.metadata.Metadata;
-import me.haga.librespot.spotifi.SpotifiApplication;
 import me.haga.librespot.spotifi.model.CurrentSong;
 import me.haga.librespot.spotifi.model.Image;
 import me.haga.librespot.spotifi.model.NextTrack;
 import me.haga.librespot.spotifi.model.PlayerLoadSong;
-import me.haga.librespot.spotifi.util.SessionWrapper;
+import me.haga.librespot.spotifi.util.PlayerWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.gianlu.librespot.common.Utils;
 import xyz.gianlu.librespot.dealer.ApiClient;
 import xyz.gianlu.librespot.metadata.ImageId;
-import xyz.gianlu.librespot.metadata.PlayableId;
 import xyz.gianlu.librespot.metadata.TrackId;
 import xyz.gianlu.librespot.player.Player;
 import xyz.gianlu.librespot.player.TrackOrEpisode;
@@ -37,15 +32,14 @@ public class PlayerController {
 
     private static final Logger log = LogManager.getLogger(PlayerController.class);
 
-    private final SessionWrapper sessionWrapper;
-    private static Player player = null;
+    private final PlayerWrapper playerWrapper;
     private static CurrentSong currentSong = new CurrentSong();
     private TrackOrEpisode trackOrEpisode;
 
-
-    public PlayerController(SessionWrapper sessionWrapper) {
-        this.sessionWrapper = sessionWrapper;
+    public PlayerController(PlayerWrapper playerWrapper) {
+        this.playerWrapper = playerWrapper;
     }
+
 
     @GetMapping(value = "current", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCurrentPlayList(@RequestParam(value = "imgsize", defaultValue = "0", required = false) Integer imgsize) {
@@ -64,7 +58,7 @@ public class PlayerController {
                         currentSong.setEpisode(toe.episode);
                     } else {
                         currentSong.setTrack(toe.track);
-                        ApiClient api = sessionWrapper.getSession().api();
+                        ApiClient api = playerWrapper.getSession().api();
                         List<NextTrack> nextTracks = new ArrayList<>();
                         song.tracks(true).next.stream().limit(2).forEach(track -> {
                             try {
@@ -155,68 +149,9 @@ public class PlayerController {
     }
 
     private Optional<Player> getPlayer() {
-        if (this.sessionWrapper.getSession() != null && player == null) {
-            player = new Player(SpotifiApplication.getLibrespotConf().toPlayer(), sessionWrapper.getSession());
-            player.addEventsListener(getListener());
-        }
-        return ofNullable(player);
+        return ofNullable(playerWrapper.getPlayer());
     }
 
-
-    private Player.EventsListener getListener() {
-        return new Player.EventsListener() {
-            @Override
-            public void onContextChanged(@NotNull String newUri) {
-
-            }
-
-
-            @Override
-            public void onTrackChanged(@NotNull PlayableId id, @Nullable TrackOrEpisode metadata) {
-
-            }
-
-            @Override
-            public void onPlaybackPaused(long trackTime) {
-
-            }
-
-            @Override
-            public void onPlaybackResumed(long trackTime) {
-
-            }
-
-            @Override
-            public void onTrackSeeked(long trackTime) {
-
-            }
-
-            @Override
-            public void onMetadataAvailable(@NotNull TrackOrEpisode metadata) {
-
-            }
-
-            @Override
-            public void onPlaybackHaltStateChanged(boolean halted, long trackTime) {
-
-            }
-
-            @Override
-            public void onInactiveSession(boolean timeout) {
-                getPlayer();
-            }
-
-            @Override
-            public void onVolumeChanged(@Range(from = 0L, to = 1L) float volume) {
-
-            }
-
-            @Override
-            public void onPanicState() {
-                getPlayer();
-            }
-        };
-    }
 
     private Image getImageFromCurrentSong(Player t, int size) {
         return ofNullable(t.currentMetadata())
