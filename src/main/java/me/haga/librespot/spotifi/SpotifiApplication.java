@@ -3,10 +3,12 @@ package me.haga.librespot.spotifi;
 import me.haga.librespot.spotifi.util.PlayerWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import xyz.gianlu.librespot.ZeroconfServer;
+import xyz.gianlu.librespot.core.Session;
 import xyz.gianlu.librespot.player.FileConfiguration;
 import xyz.gianlu.librespot.player.Player;
 
@@ -35,9 +37,18 @@ public class SpotifiApplication {
         try {
             if (zeroconfServer == null) {
                 zeroconfServer = librespotConf.initZeroconfBuilder().create();
-                zeroconfServer.addSessionListener(session -> {
-                    playerWrapper.setPlayer(new Player(librespotConf.toPlayer(), session));
-                    playerWrapper.setSession(session);
+                zeroconfServer.addSessionListener(new ZeroconfServer.SessionListener() {
+                    @Override
+                    public void sessionClosing(@NotNull Session session) {
+                        if (playerWrapper.getSession() == session)
+                            playerWrapper.clear();
+                    }
+
+                    @Override
+                    public void sessionChanged(@NotNull Session session) {
+                        playerWrapper.setPlayer(new Player(librespotConf.toPlayer(), session));
+                        playerWrapper.setSession(session);
+                    }
                 });
             }
         } catch (IOException e) {
@@ -53,7 +64,6 @@ public class SpotifiApplication {
     public static ZeroconfServer getZeroconfServer() {
         return zeroconfServer;
     }
-
 
 }
 

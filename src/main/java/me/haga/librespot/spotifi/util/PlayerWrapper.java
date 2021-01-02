@@ -23,4 +23,8 @@ public class PlayerWrapper {
     public void setSession(Session session) {
         this.session = session;
     }
+
+    public void clear() {
+        if (player != null)  player.close();;
+    }
 }
