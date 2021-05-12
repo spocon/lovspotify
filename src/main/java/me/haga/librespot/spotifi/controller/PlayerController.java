@@ -12,12 +12,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xyz.gianlu.librespot.audio.MetadataWrapper;
 import xyz.gianlu.librespot.common.Utils;
 import xyz.gianlu.librespot.dealer.ApiClient;
 import xyz.gianlu.librespot.metadata.ImageId;
 import xyz.gianlu.librespot.metadata.TrackId;
 import xyz.gianlu.librespot.player.Player;
-import xyz.gianlu.librespot.player.TrackOrEpisode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class PlayerController {
 
     private final PlayerWrapper playerWrapper;
     private static CurrentSong currentSong = new CurrentSong();
-    private TrackOrEpisode trackOrEpisode;
+    private MetadataWrapper trackOrEpisode;
 
     public PlayerController(PlayerWrapper playerWrapper) {
         this.playerWrapper = playerWrapper;
@@ -47,7 +47,7 @@ public class PlayerController {
         return getPlayer().map((Player song) -> {
 
             try {
-                TrackOrEpisode toe = song.currentMetadata();
+                MetadataWrapper toe = song.currentMetadata();
                 if (toe == null) return ResponseEntity.notFound().build();
                 currentSong.setTrackTime(song.time());
                 if (!toe.equals(trackOrEpisode)) {
@@ -80,7 +80,7 @@ public class PlayerController {
     @PostMapping(value = "load", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loadSong(@RequestBody PlayerLoadSong loadSong) {
         return getPlayer().map(t -> {
-            t.load(loadSong.getUri(), loadSong.getPlay());
+            t.load(loadSong.getUri(), loadSong.getPlay(), false);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
     }
