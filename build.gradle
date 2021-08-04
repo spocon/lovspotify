@@ -22,7 +22,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
-    implementation 'xyz.gianlu.librespot:librespot-player:1.6.0'
+    implementation 'xyz.gianlu.librespot:librespot-player:1.6.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
     implementation 'com.google.protobuf:protobuf-java-util:3.11.4'
     implementation 'org.apache.logging.log4j:log4j-core:2.13.2'
@@ -90,7 +90,7 @@ uploadArchives {
                 }
             }
 
-            pom.version = "1.5.5"
+            pom.version = "1.6.1"
             pom.artifactId = "lovspotify"
             pom.groupId = "me.haga.librespot.spotifi"
         }

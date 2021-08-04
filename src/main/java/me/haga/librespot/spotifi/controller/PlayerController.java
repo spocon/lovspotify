@@ -48,27 +48,28 @@ public class PlayerController {
 
             try {
                 MetadataWrapper toe = song.currentMetadata();
-                if (toe == null) return ResponseEntity.notFound().build();
-                currentSong.setTrackTime(song.time());
+                if (!song.isActive()) return ResponseEntity.notFound().build();
+
+
                 if (!toe.equals(trackOrEpisode)) {
                     currentSong = new CurrentSong();
                     currentSong.setImage(getImageFromCurrentSong(song, imgsize));
                     trackOrEpisode = toe;
-                    if (toe.isEpisode()) {
-                        currentSong.setEpisode(toe.episode);
-                    } else {
-                        currentSong.setTrack(toe.track);
-                        ApiClient api = playerWrapper.getSession().api();
-                        List<NextTrack> nextTracks = new ArrayList<>();
-                        song.tracks(true).next.stream().limit(2).forEach(track -> {
-                            try {
-                                Metadata.Track nextrack = api.getMetadata4Track(TrackId.fromUri(track.getUri()));
-                                nextTracks.add(new NextTrack(nextrack, getImageNextSong(nextrack)));
-                            } catch (Exception ignored) {
-                            }
-                        });
-                        currentSong.setNextTracks(nextTracks);
-                    }
+                }
+                if (toe.isEpisode()) {
+                    currentSong.setEpisode(toe.episode);
+                } else {
+                    currentSong.setTrack(toe.track);
+                    ApiClient api = playerWrapper.getSession().api();
+                    List<NextTrack> nextTracks = new ArrayList<>();
+                    song.tracks(true).next.stream().limit(2).forEach(track -> {
+                        try {
+                            Metadata.Track nextrack = api.getMetadata4Track(TrackId.fromUri(track.getUri()));
+                            nextTracks.add(new NextTrack(nextrack, getImageNextSong(nextrack)));
+                        } catch (Exception ignored) {
+                        }
+                    });
+                    currentSong.setNextTracks(nextTracks);
                 }
                 return ResponseEntity.ok().body(currentSong);
             } catch (Exception e) {
