@@ -1,18 +1,17 @@
 
 plugins {
-    id 'org.springframework.boot' version '2.3.1.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.6.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'maven'
     id 'signing'
+    id 'maven-publish'
 }
 
 group = 'me.haga.librespot.spotifi'
 description = 'Spotify Client + RestAPI + Spotify GUI'
-
+version = '1.6.2'
 
 sourceCompatibility = '11'
-
 
 repositories {
     mavenCentral()
@@ -22,11 +21,11 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
-    implementation 'xyz.gianlu.librespot:librespot-player:1.6.1'
+    implementation 'xyz.gianlu.librespot:librespot-player:1.6.2'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
     implementation 'com.google.protobuf:protobuf-java-util:3.11.4'
-    implementation 'org.apache.logging.log4j:log4j-core:2.13.2'
-    implementation 'org.apache.logging.log4j:log4j-api:2.13.2'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
 }
 
 
@@ -38,62 +37,115 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
-/*
+
 artifacts {
     archives sourcesJar
     archives javadocJar
 }
 
+/**
+ TODO fix upload to oss.sonatype
 
 signing {
-    required { gradle.taskGraph.hasTask('uploadArchives') }
-
     sign configurations.archives
 }
 
 
-uploadArchives {
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
 
+            customizePom(pom, rootProject)
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+                pomFile.delete()
+            }
+
+            // sign the artifacts
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc|jre9)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
+            }
+
+        }
+    }
     repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-                authentication(userName: spoconMavenUsername, password: spoconMavenPassword)
-            }
-
-            pom.project {
-                name 'Lovspotify'
-                packaging 'jar'
-                // optionally artifactId can be defined here
-                description 'Spotify Client + RestAPI + Spotify GUI written in Java '
-                url 'https://github.com/spocon/lovspotify'
-
-                scm {
-                    connection 'scm:git:git://github.com/spocon/lovspotify.git'
-                    developerConnection 'scm:git:ssh://github.com:spocon/lovspotify.git'
-                    url 'https://github.com/spocon/lovspotify'
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                credentials {
+                    username spoconMavenUsername
+                    password spoconMavenPassword
                 }
-
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        organization 'Lovspotify Developers'
-                        organizationUrl 'https://github.com/spocon/lovspotify/graphs/contributors'
-                    }
-                }
-            }
-
-            pom.version = "1.6.1"
-            pom.artifactId = "lovspotify"
-            pom.groupId = "me.haga.librespot.spotifi"
         }
     }
 }
-*/
+
+model {
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn(project.tasks.signArchives)
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn(project.tasks.signArchives)
+    }
+    tasks.publish {
+        dependsOn(project.tasks.build)
+    }
+    tasks.install {
+        dependsOn(project.tasks.build)
+    }
+}
+
+
+def customizePom(pom, gradleProject) {
+    pom.withXml {
+        def root = asNode()
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            name 'Lovspotify'
+            packaging 'jar'
+            // optionally artifactId can be defined here
+            description 'Spotify Client + RestAPI + Spotify GUI written in Java '
+            url 'https://github.com/spocon/lovspotify'
+
+            licenses {
+                license {
+                    name 'The Apache License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                }
+            }
+            scm {
+                connection 'scm:git:git://github.com/spocon/lovspotify.git'
+                developerConnection 'scm:git:ssh://github.com:spocon/lovspotify.git'
+                url 'https://github.com/spocon/lovspotify'
+            }
+            developers {
+                developer {
+                    organization 'Lovspotify Developers'
+                    organizationUrl 'https://github.com/spocon/lovspotify/graphs/contributors'
+                }
+            }
+        }
+    }
+}
+**/
