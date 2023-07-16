@@ -22,7 +22,7 @@
     - "/build/lovspotify_{{ lovspotify_version }}"
 
 - name: Building deb package {{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}
-  shell: "dch -v {{ lovspotify_version }} \"Update to {{ lovspotify_version }}, for more information please see https://github.com/spocon/lovspotify \" -M -D bionic"
+  shell: "dch -v {{ lovspotify_version }} \"Update to {{ lovspotify_version }}, for more information please see https://github.com/spocon/lovspotify \" -M -D jammy"
   args:
     chdir: "{{ workspace }}/template"
 
@@ -30,8 +30,6 @@
   copy:
     src: "{{ workspace }}/template/"
     dest: "{{ tmpFolder }}/build/lovspotify_{{ lovspotify_version }}"
-
-
 
 - name: Put service in package
   template:

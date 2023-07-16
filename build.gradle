@@ -1,7 +1,7 @@
 
 plugins {
-    id 'org.springframework.boot' version '2.6.2'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
     id 'signing'
     id 'maven-publish'
@@ -9,9 +9,9 @@ plugins {
 
 group = 'me.haga.librespot.spotifi'
 description = 'Spotify Client + RestAPI + Spotify GUI'
-version = '1.6.2'
+version = '1.6.3'
 
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -21,30 +21,28 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
-    implementation 'xyz.gianlu.librespot:librespot-player:1.6.2'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
-    implementation 'com.google.protobuf:protobuf-java-util:3.11.4'
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
-    implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+    implementation 'xyz.gianlu.librespot:librespot-player:1.6.3'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
+    implementation 'com.google.protobuf:protobuf-java-util:3.23.4'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
 }
+
+jar.archiveFileName = "lovspotify.jar"
 
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from sourceSets.main.allSource
 }
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+
+javadoc {
+
 }
 
 artifacts {
-    archives sourcesJar
-    archives javadocJar
+    archives javadocJar, sourcesJar
 }
-
-/**
- TODO fix upload to oss.sonatype
 
 signing {
     sign configurations.archives
@@ -56,10 +54,9 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
 
-            customizePom(pom, rootProject)
+            customizePom(pom)
 
             artifact sourcesJar
-            artifact javadocJar
 
             pom.withXml {
                 def pomFile = file("${project.buildDir}/generated-pom.xml")
@@ -91,8 +88,8 @@ publishing {
         maven {
             url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
                 credentials {
-                    username spoconMavenUsername
-                    password spoconMavenPassword
+                    username 'thaga'
+                    password 'Domi0306!!!!!!'
                 }
         }
     }
@@ -113,8 +110,7 @@ model {
     }
 }
 
-
-def customizePom(pom, gradleProject) {
+def customizePom(pom) {
     pom.withXml {
         def root = asNode()
 
@@ -148,4 +144,4 @@ def customizePom(pom, gradleProject) {
         }
     }
 }
-**/
+
